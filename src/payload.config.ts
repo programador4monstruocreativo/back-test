@@ -14,6 +14,11 @@ import { Todos } from './collections/Todos'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean)
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -22,8 +27,8 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Categories, Posts, Todos],
-  cors: ['http://localhost:3011', 'http://127.0.0.1:3011'],
-  csrf: ['http://localhost:3011', 'http://127.0.0.1:3011'],
+  cors: allowedOrigins,
+  csrf: allowedOrigins,
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
